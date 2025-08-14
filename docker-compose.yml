@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: "traefik:v3.5"
+    container_name: traefik
+    restart: always
+    command:
+      - "--providers.docker"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "./acme.json:/etc/traefik/acme.json"
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.dev.local`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+networks:
+  web:
+    name: web
+    driver: bridge
