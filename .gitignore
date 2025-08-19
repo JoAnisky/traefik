@@ -1,2 +1,8 @@
-/acme.json/
+# Fichiers de l'IDE
 /.idea/*
+# Env
+.env.docker.dev
+.env.docker.prod
+.env
+# Certificates
+traefik-certs/
