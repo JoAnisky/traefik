@@ -7,15 +7,18 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      # Les options prod (HTTPS + auth) sont dans traefik.prod.yml
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./config/traefik/traefik.${ENVIRONMENT}.yml:/etc/traefik/traefik.yml:ro"
+      - "traefik-certs:/letsencrypt"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.dev.local`)"
+      - "traefik.http.routers.traefik.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.traefik.service=api@internal"
     networks:
       - web
@@ -23,3 +26,6 @@ services:
 networks:
   web:
     external: true
+
+volumes:
+  traefik-certs:
