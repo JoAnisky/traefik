@@ -7,7 +7,7 @@ entryPoints:
 providers:
   docker:
     exposedByDefault: false
-
+    network: web
 api:
   dashboard: true
   insecure: false
